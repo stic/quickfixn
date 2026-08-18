@@ -189,6 +189,19 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     }
 
     /// <summary>
+    /// Gets a UTC datetime field; saves its value into the parameter object, which is also the return value.
+    /// </summary>
+    /// <param name="field">this field's tag is used to extract the value from the message; that value is saved back into this object</param>
+    /// <exception cref="FieldNotFoundException">thrown if <paramref name="field"/> isn't found</exception>
+    /// <exception cref="FieldConvertError">thrown if string value in the message cannot be converted to this type</exception>
+    /// <returns><paramref name="field"/></returns>
+    public UtcDateTimeField GetField(UtcDateTimeField field)
+    {
+        field.Value = GetUtcDateTime(field.Tag);
+        return field;
+    }
+
+    /// <summary>
     /// Gets a datetime field; saves its value into the parameter object, which is also the return value.
     /// </summary>
     /// <param name="field">this field's tag is used to extract the value from the message; that value is saved back into this object</param>
@@ -379,6 +392,35 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
             _ => DateTimeConverter.ParseToDateTime(fld.ToString())
         };
     }
+
+    /// <summary>
+    /// Gets the value of a field as a UTC DateTime, normalizing a wire-decoded UTCTIMESTAMP value to UTC.
+    /// </summary>
+    /// <param name="tag">the FIX tag</param>
+    /// <returns>the DateTime value with <see cref="DateTimeKind.Utc"/></returns>
+    /// <exception cref="FieldNotFoundException" />
+    /// <exception cref="FieldConvertError" />
+    public DateTime GetUtcDateTime(int tag)
+    {
+        if (!_fields.TryGetValue(tag, out IField? fld))
+            throw new FieldNotFoundException(tag);
+
+        return fld switch
+        {
+            DateOnlyField dateOnlyField => NormalizeUtc(dateOnlyField.Value.ToDateTime(new TimeOnly())),
+            TimeOnlyField timeOnlyField => NormalizeUtc(new DateTime(1980, 01, 01).Add(timeOnlyField.Value.ToTimeSpan())),
+            UtcDateTimeField utcDateTimeField => utcDateTimeField.Value,
+            FieldBase<DateTime> dateTimeField => NormalizeUtc(dateTimeField.Value),
+            _ => NormalizeUtc(DateTimeConverter.ParseToDateTime(fld.ToString()))
+        };
+    }
+
+    private static DateTime NormalizeUtc(DateTime dt) => dt.Kind switch
+    {
+        DateTimeKind.Utc => dt,
+        DateTimeKind.Local => dt.ToUniversalTime(),
+        _ => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
+    };
 
     /// <summary>
     /// Gets the value of a field as a DateOnly

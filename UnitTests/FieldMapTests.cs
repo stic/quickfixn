@@ -208,6 +208,28 @@ public class FieldMapTests
     }
 
     [Test]
+    public void GetUtcDateTimeTest()
+    {
+        FieldMap fm = new();
+
+        var dt = new DateTime(2025, 10, 31, 17, 30, 59, DateTimeKind.Utc);
+        fm.SetField(new UtcDateTimeField(Tags.SendingTime, dt));
+        Assert.That(fm.GetUtcDateTime(Tags.SendingTime), Is.EqualTo(dt));
+        Assert.That(fm.GetUtcDateTime(Tags.SendingTime).Kind, Is.EqualTo(DateTimeKind.Utc));
+
+        fm.SetField(new StringField(Tags.SendingTime, "20251031-17:30:59"));
+        var expected = DateTime.SpecifyKind(new DateTime(2025, 10, 31, 17, 30, 59), DateTimeKind.Utc);
+        Assert.That(fm.GetUtcDateTime(Tags.SendingTime), Is.EqualTo(expected));
+        Assert.That(fm.GetUtcDateTime(Tags.SendingTime).Kind, Is.EqualTo(DateTimeKind.Utc));
+
+        fm.SetField(new StringField(Tags.SendingTime, "oops"));
+        Assert.Throws<FieldConvertError>(delegate { fm.GetUtcDateTime(Tags.SendingTime); });
+
+        Assert.Throws(typeof(FieldNotFoundException),
+                delegate { fm.GetUtcDateTime(99900); });
+    }
+
+    [Test]
     public void GetDateOnlyTest()
     {
         FieldMap fm = new();
