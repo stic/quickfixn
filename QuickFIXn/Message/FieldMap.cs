@@ -396,31 +396,15 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     /// <summary>
     /// Gets the value of a field as a UTC DateTime, normalizing a wire-decoded UTCTIMESTAMP value to UTC.
     /// </summary>
+    /// <remarks>
+    /// A <see cref="DateOnlyField"/>/<see cref="TimeOnlyField"/> is labelled UTC too, for consistency with
+    /// <see cref="GetDateTime"/>, even though e.g. LOCALMKTDATE is not actually a UTC value.
+    /// </remarks>
     /// <param name="tag">the FIX tag</param>
     /// <returns>the DateTime value with <see cref="DateTimeKind.Utc"/></returns>
     /// <exception cref="FieldNotFoundException" />
     /// <exception cref="FieldConvertError" />
-    public DateTime GetUtcDateTime(int tag)
-    {
-        if (!_fields.TryGetValue(tag, out IField? fld))
-            throw new FieldNotFoundException(tag);
-
-        return fld switch
-        {
-            DateOnlyField dateOnlyField => NormalizeUtc(dateOnlyField.Value.ToDateTime(new TimeOnly())),
-            TimeOnlyField timeOnlyField => NormalizeUtc(new DateTime(1980, 01, 01).Add(timeOnlyField.Value.ToTimeSpan())),
-            UtcDateTimeField utcDateTimeField => utcDateTimeField.Value,
-            FieldBase<DateTime> dateTimeField => NormalizeUtc(dateTimeField.Value),
-            _ => NormalizeUtc(DateTimeConverter.ParseToDateTime(fld.ToString()))
-        };
-    }
-
-    private static DateTime NormalizeUtc(DateTime dt) => dt.Kind switch
-    {
-        DateTimeKind.Utc => dt,
-        DateTimeKind.Local => dt.ToUniversalTime(),
-        _ => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
-    };
+    public DateTime GetUtcDateTime(int tag) => NormalizeUtc(GetDateTime(tag));
 
     /// <summary>
     /// Gets the value of a field as a DateOnly
@@ -736,6 +720,14 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
             }
         }
     }
+
+    private static DateTime NormalizeUtc(DateTime dt) => dt.Kind switch
+    {
+        DateTimeKind.Utc => dt,
+        DateTimeKind.Local => dt.ToUniversalTime(),
+        // Unspecified: per FIX spec a UTCTIMESTAMP is already UTC, so relabel without shifting.
+        _ => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
+    };
 
     // IEnumerable<KeyValuePair<int,IField>> Member
     public IEnumerator<KeyValuePair<int, IField>> GetEnumerator()

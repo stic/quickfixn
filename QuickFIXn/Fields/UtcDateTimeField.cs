@@ -11,7 +11,7 @@ namespace QuickFix.Fields;
 /// Note that <see cref="QuickFix.FieldMap.GetDateTime(int)"/> still returns
 /// <see cref="DateTimeKind.Unspecified"/> for a wire-parsed value, because a bare tag lookup has no
 /// DataDictionary context to know the field is a UTCTIMESTAMP. Use the typed <c>GetField</c> overloads
-/// to obtain a normalized value.
+/// or <see cref="QuickFix.FieldMap.GetUtcDateTime(int)"/> to obtain a normalized value.
 /// </remarks>
 public class UtcDateTimeField : DateTimeField
 {
