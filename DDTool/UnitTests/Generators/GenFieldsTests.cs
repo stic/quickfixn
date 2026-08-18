@@ -9,9 +9,11 @@ namespace UnitTests.Generators;
 [TestClass]
 public class GenFieldsTests {
 
+    public TestContext TestContext { get; set; } = null!;
+
     [TestMethod]
     public void UtcTimestampFieldIsGeneratedWithUtcDateTimeFieldBaseClass() {
-        string repoRoot = Path.Combine(Path.GetTempPath(), "GenFieldsTests_" + Path.GetRandomFileName());
+        string repoRoot = Path.Combine(TestContext.TestRunDirectory!, Path.GetRandomFileName());
         Directory.CreateDirectory(Path.Combine(repoRoot, "QuickFIXn", "Fields"));
 
         try {

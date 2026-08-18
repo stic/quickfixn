@@ -34,6 +34,8 @@ public abstract class FieldBase<T> : IField
         _stringField = "";
     }
 
+    // Virtual so UtcDateTimeField can normalize DateTimeKind on assignment; see UtcDateTimeField.Value
+    // for why the dispatch cost is negligible here.
     public virtual T Value
     {
         get => _value;

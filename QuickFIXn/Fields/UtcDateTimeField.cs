@@ -16,12 +16,12 @@ namespace QuickFix.Fields;
 public class UtcDateTimeField : DateTimeField
 {
     public UtcDateTimeField(int tag)
-        : base(tag, DateTime.SpecifyKind(new DateTime(), DateTimeKind.Utc)) {}
+        : base(tag, DateTime.SpecifyKind(default, DateTimeKind.Utc)) {}
 
     public UtcDateTimeField(int tag, DateTime dt)
         : base(tag, ToUtc(dt)) {}
 
-    [Obsolete("Use the ctor that takes TimePrecision instead.  This ctor will be removed in 1.15.")]
+    // Not [Obsolete] here, matching DateTimeField; the deprecation is applied to the generated field classes.
     public UtcDateTimeField(int tag, DateTime dt, bool showMilliseconds)
         : base(tag, ToUtc(dt), showMilliseconds) {}
 
@@ -44,7 +44,9 @@ public class UtcDateTimeField : DateTimeField
     {
         DateTimeKind.Utc => dt,
         DateTimeKind.Local => dt.ToUniversalTime(),
-        DateTimeKind.Unspecified => DateTime.SpecifyKind(dt, DateTimeKind.Utc), // Unspecified: FIX spec guarantees UTCTIMESTAMP is already UTC
-        _ => throw new ArgumentOutOfRangeException(nameof(dt), "Invalid DateTimeKind")
+        // Unspecified: per FIX spec a UTCTIMESTAMP is already UTC, so relabel without shifting.
+        // Used as the discard arm because DateTime.Kind cannot return an undeclared value
+        // (see UtcDateTimeFieldTests.DateTimeKindHasNoUnhandledMembers).
+        _ => DateTime.SpecifyKind(dt, DateTimeKind.Utc)
     };
 }

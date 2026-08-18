@@ -75,20 +75,27 @@ public class UtcDateTimeFieldTests
     }
 
     [Test]
+    public void DateTimeKindHasNoUnhandledMembers()
+    {
+        // UtcDateTimeField.ToUtc treats anything that isn't Utc/Local as Unspecified; fail loudly if a
+        // future runtime adds a member that assumption would silently swallow
+        Assert.That(Enum.GetValues<DateTimeKind>(), Is.EquivalentTo(new[]
+            { DateTimeKind.Unspecified, DateTimeKind.Utc, DateTimeKind.Local }));
+    }
+
+    [Test]
     public void ToStringTest()
     {
         UtcDateTimeField f = new(Tags.SendingTime, new DateTime(2009, 9, 4, 3, 44, 1));
         Assert.That(f.ToString(), Is.EqualTo("20090904-03:44:01.000"));
-        Assert.That(f.ToStringField(), Is.EqualTo($"{Tags.SendingTime}=20090904-03:44:01.000"));
+        Assert.That(f.ToStringField(), Is.EqualTo("52=20090904-03:44:01.000"));
     }
 
     [Test]
     public void LegacyCtorThatTakesShowMillisecondsTest()
     {
         DateTime dt = new(2025, 10, 31, 17, 30, 59);
-#pragma warning disable CS0618
         UtcDateTimeField f = new(Tags.SendingTime, dt, false);
-#pragma warning restore CS0618
 
         Assert.That(f.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
         Assert.That(f.ToString(), Is.EqualTo("20251031-17:30:59"));
