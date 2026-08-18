@@ -202,6 +202,19 @@ public class FieldMap : IEnumerable<KeyValuePair<int, IField>> {
     }
 
     /// <summary>
+    /// Gets a UTCTIMESTAMP datetime field; saves its value into the parameter object, which is also the return value.
+    /// </summary>
+    /// <param name="field">this field's tag is used to extract the value from the message; that value is saved back into this object</param>
+    /// <exception cref="FieldNotFoundException">thrown if <paramref name="field"/> isn't found</exception>
+    /// <exception cref="FieldConvertError">thrown if string value in the message cannot be converted to this type</exception>
+    /// <returns><paramref name="field"/></returns>
+    public UtcDateTimeField GetField(UtcDateTimeField field)
+    {
+        field.Value = GetDateTime(field.Tag);
+        return field;
+    }
+
+    /// <summary>
     /// Gets a DateOnly field; saves its value into the parameter object, which is also the return value.
     /// </summary>
     /// <param name="field">this field's tag is used to extract the value from the message; that value is saved back into this object</param>

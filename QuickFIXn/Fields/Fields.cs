@@ -945,7 +945,7 @@ public sealed class OrigClOrdID : StringField
 /// <summary>
 /// OrigTime Field
 /// </summary>
-public sealed class OrigTime : DateTimeField
+public sealed class OrigTime : UtcDateTimeField
 {
     public const int TAG = 42;
 
@@ -1125,7 +1125,7 @@ public sealed class SenderSubID : StringField
 /// <summary>
 /// SendingTime Field
 /// </summary>
-public sealed class SendingTime : DateTimeField
+public sealed class SendingTime : UtcDateTimeField
 {
     public const int TAG = 52;
 
@@ -1264,7 +1264,7 @@ public sealed class TimeInForce : CharField
 /// <summary>
 /// TransactTime Field
 /// </summary>
-public sealed class TransactTime : DateTimeField
+public sealed class TransactTime : UtcDateTimeField
 {
     public const int TAG = 60;
 
@@ -1300,7 +1300,7 @@ public sealed class Urgency : CharField
 /// <summary>
 /// ValidUntilTime Field
 /// </summary>
-public sealed class ValidUntilTime : DateTimeField
+public sealed class ValidUntilTime : UtcDateTimeField
 {
     public const int TAG = 62;
 
@@ -2267,7 +2267,7 @@ public sealed class ForexReq : BooleanField
 /// <summary>
 /// OrigSendingTime Field
 /// </summary>
-public sealed class OrigSendingTime : DateTimeField
+public sealed class OrigSendingTime : UtcDateTimeField
 {
     public const int TAG = 122;
 
@@ -2334,7 +2334,7 @@ public sealed class CxlType : CharField
 /// <summary>
 /// ExpireTime Field
 /// </summary>
-public sealed class ExpireTime : DateTimeField
+public sealed class ExpireTime : UtcDateTimeField
 {
     public const int TAG = 126;
 
@@ -3133,7 +3133,7 @@ public sealed class SecurityType : StringField
 /// <summary>
 /// EffectiveTime Field
 /// </summary>
-public sealed class EffectiveTime : DateTimeField
+public sealed class EffectiveTime : UtcDateTimeField
 {
     public const int TAG = 168;
 
@@ -5392,7 +5392,7 @@ public sealed class TradSesStatus : IntField
 /// <summary>
 /// TradSesStartTime Field
 /// </summary>
-public sealed class TradSesStartTime : DateTimeField
+public sealed class TradSesStartTime : UtcDateTimeField
 {
     public const int TAG = 341;
 
@@ -5410,7 +5410,7 @@ public sealed class TradSesStartTime : DateTimeField
 /// <summary>
 /// TradSesOpenTime Field
 /// </summary>
-public sealed class TradSesOpenTime : DateTimeField
+public sealed class TradSesOpenTime : UtcDateTimeField
 {
     public const int TAG = 342;
 
@@ -5428,7 +5428,7 @@ public sealed class TradSesOpenTime : DateTimeField
 /// <summary>
 /// TradSesPreCloseTime Field
 /// </summary>
-public sealed class TradSesPreCloseTime : DateTimeField
+public sealed class TradSesPreCloseTime : UtcDateTimeField
 {
     public const int TAG = 343;
 
@@ -5446,7 +5446,7 @@ public sealed class TradSesPreCloseTime : DateTimeField
 /// <summary>
 /// TradSesCloseTime Field
 /// </summary>
-public sealed class TradSesCloseTime : DateTimeField
+public sealed class TradSesCloseTime : UtcDateTimeField
 {
     public const int TAG = 344;
 
@@ -5464,7 +5464,7 @@ public sealed class TradSesCloseTime : DateTimeField
 /// <summary>
 /// TradSesEndTime Field
 /// </summary>
-public sealed class TradSesEndTime : DateTimeField
+public sealed class TradSesEndTime : UtcDateTimeField
 {
     public const int TAG = 345;
 
@@ -5761,7 +5761,7 @@ public sealed class AllocPrice : DecimalField
 /// <summary>
 /// QuoteSetValidUntilTime Field
 /// </summary>
-public sealed class QuoteSetValidUntilTime : DateTimeField
+public sealed class QuoteSetValidUntilTime : UtcDateTimeField
 {
     public const int TAG = 367;
 
@@ -5821,7 +5821,7 @@ public sealed class LastMsgSeqNumProcessed : SeqNumFieldType
 /// <summary>
 /// OnBehalfOfSendingTime Field
 /// </summary>
-public sealed class OnBehalfOfSendingTime : DateTimeField
+public sealed class OnBehalfOfSendingTime : UtcDateTimeField
 {
     public const int TAG = 370;
 
@@ -6918,7 +6918,7 @@ public sealed class ContraTradeQty : DecimalField
 /// <summary>
 /// ContraTradeTime Field
 /// </summary>
-public sealed class ContraTradeTime : DateTimeField
+public sealed class ContraTradeTime : UtcDateTimeField
 {
     public const int TAG = 438;
 
@@ -6994,7 +6994,7 @@ public sealed class MultiLegReportingType : CharField
 /// <summary>
 /// StrikeTime Field
 /// </summary>
-public sealed class StrikeTime : DateTimeField
+public sealed class StrikeTime : UtcDateTimeField
 {
     public const int TAG = 443;
 
@@ -8562,7 +8562,7 @@ public sealed class MailingInst : StringField
 /// <summary>
 /// TransBkdTime Field
 /// </summary>
-public sealed class TransBkdTime : DateTimeField
+public sealed class TransBkdTime : UtcDateTimeField
 {
     public const int TAG = 483;
 
@@ -9096,7 +9096,7 @@ public sealed class RegistTransType : CharField
 /// <summary>
 /// ExecValuationPoint Field
 /// </summary>
-public sealed class ExecValuationPoint : DateTimeField
+public sealed class ExecValuationPoint : UtcDateTimeField
 {
     public const int TAG = 515;
 
@@ -10327,7 +10327,7 @@ public sealed class MassStatusReqType : IntField
 /// <summary>
 /// OrigOrdModTime Field
 /// </summary>
-public sealed class OrigOrdModTime : DateTimeField
+public sealed class OrigOrdModTime : UtcDateTimeField
 {
     public const int TAG = 586;
 
@@ -10935,7 +10935,7 @@ public sealed class HopCompID : StringField
 /// <summary>
 /// HopSendingTime Field
 /// </summary>
-public sealed class HopSendingTime : DateTimeField
+public sealed class HopSendingTime : UtcDateTimeField
 {
     public const int TAG = 629;
 
@@ -13259,7 +13259,7 @@ public sealed class NoTrdRegTimestamps : IntField
 /// <summary>
 /// TrdRegTimestamp Field
 /// </summary>
-public sealed class TrdRegTimestamp : DateTimeField
+public sealed class TrdRegTimestamp : UtcDateTimeField
 {
     public const int TAG = 769;
 
@@ -13418,7 +13418,7 @@ public sealed class NoSettlInst : IntField
 /// <summary>
 /// LastUpdateTime Field
 /// </summary>
-public sealed class LastUpdateTime : DateTimeField
+public sealed class LastUpdateTime : UtcDateTimeField
 {
     public const int TAG = 779;
 
@@ -16407,7 +16407,7 @@ public sealed class HostCrossID : StringField
 /// <summary>
 /// SideTimeInForce Field
 /// </summary>
-public sealed class SideTimeInForce : DateTimeField
+public sealed class SideTimeInForce : UtcDateTimeField
 {
     public const int TAG = 962;
 
@@ -17094,7 +17094,7 @@ public sealed class MessageEventSource : StringField
 /// <summary>
 /// SideTrdRegTimestamp Field
 /// </summary>
-public sealed class SideTrdRegTimestamp : DateTimeField
+public sealed class SideTrdRegTimestamp : UtcDateTimeField
 {
     public const int TAG = 1012;
 
@@ -19055,7 +19055,7 @@ public sealed class ImpliedMarketIndicator : IntField
 /// <summary>
 /// EventTime Field
 /// </summary>
-public sealed class EventTime : DateTimeField
+public sealed class EventTime : UtcDateTimeField
 {
     public const int TAG = 1145;
 
@@ -20989,7 +20989,7 @@ public sealed class DerivativeEventDate : StringField
 /// <summary>
 /// DerivativeEventTime Field
 /// </summary>
-public sealed class DerivativeEventTime : DateTimeField
+public sealed class DerivativeEventTime : UtcDateTimeField
 {
     public const int TAG = 1289;
 
@@ -24064,7 +24064,7 @@ public sealed class NoComplexEventDates : IntField
 /// <summary>
 /// ComplexEventStartDate Field
 /// </summary>
-public sealed class ComplexEventStartDate : DateTimeField
+public sealed class ComplexEventStartDate : UtcDateTimeField
 {
     public const int TAG = 1492;
 
@@ -24082,7 +24082,7 @@ public sealed class ComplexEventStartDate : DateTimeField
 /// <summary>
 /// ComplexEventEndDate Field
 /// </summary>
-public sealed class ComplexEventEndDate : DateTimeField
+public sealed class ComplexEventEndDate : UtcDateTimeField
 {
     public const int TAG = 1493;
 
@@ -24249,7 +24249,7 @@ public sealed class StreamAsgnAckType : IntField
 /// <summary>
 /// RelSymTransactTime Field
 /// </summary>
-public sealed class RelSymTransactTime : DateTimeField
+public sealed class RelSymTransactTime : UtcDateTimeField
 {
     public const int TAG = 1504;
 

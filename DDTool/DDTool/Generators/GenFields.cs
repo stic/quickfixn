@@ -36,6 +36,7 @@ public static class GenFields {
             lines.Add("");
             switch (field.CsClass) {
                 case "DateTimeField":
+                case "UtcDateTimeField":
                     AppendDateTimeField(lines, field);
                     break;
                 case "TimeOnlyField":
