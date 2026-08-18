@@ -119,7 +119,7 @@ public class FieldMapTests
         fm.GetField(st);
 
         Assert.That(st.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
-        Assert.That(st.Value, Is.EqualTo(new DateTime(2009, 12, 11, 12, 12, 44)));
+        Assert.That(st.Value == new DateTime(2009, 12, 11, 12, 12, 44, DateTimeKind.Utc), Is.True);
     }
 
     [Test]

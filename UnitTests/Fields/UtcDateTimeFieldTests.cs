@@ -34,10 +34,12 @@ public class UtcDateTimeFieldTests
 
         UtcDateTimeField f = new(Tags.SendingTime, local);
 
+        DateTime expectedUtc = DateTime.SpecifyKind(local - offset, DateTimeKind.Utc);
+
         Assert.That(f.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
-        Assert.That(f.Value, Is.EqualTo(local - offset));
+        Assert.That(f.Value == expectedUtc, Is.True);
         if (offset != TimeSpan.Zero) // CI runs UTC, where a converted value is indistinguishable from a relabeled one
-            Assert.That(f.Value, Is.Not.EqualTo(local));
+            Assert.That(f.Value == DateTime.SpecifyKind(local, DateTimeKind.Utc), Is.False);
     }
 
     [Test]
@@ -70,8 +72,10 @@ public class UtcDateTimeFieldTests
 
         f.Value = local;
 
+        DateTime expectedUtc = DateTime.SpecifyKind(local - offset, DateTimeKind.Utc);
+
         Assert.That(f.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
-        Assert.That(f.Value, Is.EqualTo(local - offset));
+        Assert.That(f.Value == expectedUtc, Is.True);
     }
 
     [Test]

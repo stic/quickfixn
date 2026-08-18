@@ -250,7 +250,7 @@ public class MessageTests
         msg.Header.GetField(st);
 
         Assert.That(st.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
-        Assert.That(st.Value, Is.EqualTo(new DateTime(2000, 4, 26, 12, 5, 6)));
+        Assert.That(st.Value == new DateTime(2000, 4, 26, 12, 5, 6, DateTimeKind.Utc), Is.True);
     }
 
     [Test]
