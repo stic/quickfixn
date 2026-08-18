@@ -10,19 +10,6 @@ What's New
 
 **IMPORTANT NOTICES:**  
 
-* **1.15 introduces a new `UtcDateTimeField` base class for UTCTIMESTAMP fields.**
-    * Fields whose FIX type is UTCTIMESTAMP (`SendingTime`, `TransactTime`, `ExpireTime`, etc.) now derive
-      from `UtcDateTimeField` instead of `DateTimeField`. Their `Value` is always returned with
-      `DateTime.Kind == Utc`, per the FIX spec, instead of `Unspecified`.
-    * **This can change the bytes on the wire.** If you construct such a field from a `DateTime` whose
-      `Kind` is `Local` (e.g. `new TransactTime(DateTime.Now)`), the value is now converted to UTC before
-      being written. Previously the local wall-clock time was written as-is. Applications that were
-      compensating for the old behavior will shift by their local UTC offset. `Unspecified` values are
-      relabeled only, never shifted.
-    * `TZTIMESTAMP` fields (`TZTransactTime`) are unaffected and remain on `DateTimeField`.
-    * `FieldMap.GetDateTime(int tag)` is unchanged and still returns `Unspecified` for a wire-parsed
-      value; a bare tag lookup has no DataDictionary context to know the field is a UTCTIMESTAMP.
-    * This is a binary-breaking (but source-compatible) change for pre-compiled consumers.
 * **1.15 introduces breaking changes to `TimeOnlyField`/`DateOnlyField` classes and derived FIX fields.**
     * These field types are now backed by C# `TimeOnly`/`DateOnly` instances instead of `DateTime`.
       Some ctors/functions were deprecated as per usual procedure, but certain ctors/functions have
@@ -65,7 +52,6 @@ What's New
 * #1021 - remove .NET 8 support; remove expired deprecations (gbirchmeier)
 * #1015 - rework DateOnlyField/TimeOnlyField to be backed by DateOnly/TimeOnly types instead of DateTime (gbirchmeier)
 * #1023 - new config setting "FieldSeparatorInMessageLogs" (gbirchmeier)
-* #1030 - new UtcDateTimeField base class so UTCTIMESTAMP fields always have DateTimeKind.Utc (stic)
 
 
 ### v1.14.1
