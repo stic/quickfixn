@@ -123,6 +123,17 @@ public class FieldMapTests
     }
 
     [Test]
+    public void SendingTimeParsedFromWireHasUtcKindViaBaseTypedReferenceTest()
+    {
+        FieldMap fm = new();
+        fm.SetField(new StringField(Tags.SendingTime, "20091211-12:12:44"));
+        DateTimeField st = new SendingTime();
+        fm.GetField(st);
+
+        Assert.That(st.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
+    }
+
+    [Test]
     public void TZTransactTimeRetainsOffsetAwareParsingTest()
     {
         // TZTIMESTAMP fields must be unaffected by the UtcDateTimeField change

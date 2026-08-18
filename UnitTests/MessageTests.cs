@@ -240,6 +240,20 @@ public class MessageTests
     }
 
     [Test]
+    public void SendingTimeFromParsedMessageHasUtcKindTest()
+    {
+        string msgStr = "8=FIX.4.2|9=55|35=0|34=3|49=TW|52=20000426-12:05:06|56=ISLD|1=acct123|10=123|"
+            .Replace('|', Message.SOH);
+        Message msg = new Message(msgStr);
+
+        SendingTime st = new();
+        msg.Header.GetField(st);
+
+        Assert.That(st.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
+        Assert.That(st.Value, Is.EqualTo(new DateTime(2000, 4, 26, 12, 5, 6)));
+    }
+
+    [Test]
     public void EnumeratorTest()
     {
         string msgStr = "8=FIX.4.2|9=55|35=0|34=3|49=TW|52=20000426-12:05:06|56=ISLD|1=acct123|10=123|"

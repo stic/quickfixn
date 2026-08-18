@@ -27,11 +27,17 @@ public class UtcDateTimeFieldTests
     [Test]
     public void CtorWithLocalKindTest()
     {
-        DateTime dt = DateTime.SpecifyKind(new DateTime(2025, 10, 31, 17, 30, 59), DateTimeKind.Local);
-        UtcDateTimeField f = new(Tags.SendingTime, dt);
+        DateTime local = DateTime.SpecifyKind(new DateTime(2025, 10, 31, 17, 30, 59), DateTimeKind.Local);
+        // derive the expectation from TimeZoneInfo, not from ToUniversalTime, so this isn't just a
+        // restatement of the implementation
+        TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(local);
+
+        UtcDateTimeField f = new(Tags.SendingTime, local);
 
         Assert.That(f.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
-        Assert.That(f.Value, Is.EqualTo(dt.ToUniversalTime()));
+        Assert.That(f.Value, Is.EqualTo(local - offset));
+        if (offset != TimeSpan.Zero) // CI runs UTC, where a converted value is indistinguishable from a relabeled one
+            Assert.That(f.Value, Is.Not.EqualTo(local));
     }
 
     [Test]
@@ -51,6 +57,21 @@ public class UtcDateTimeFieldTests
         f.Value = new DateTime(2025, 10, 31, 17, 30, 59);
 
         Assert.That(f.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
+    }
+
+    [Test]
+    public void ValueSetterForcesUtcViaBaseTypedReferenceTest()
+    {
+        // Value must be an override, not `new`-hiding, or a base-typed reference would write local
+        // wall-clock time into a UTCTIMESTAMP field
+        DateTimeField f = new SendingTime();
+        DateTime local = DateTime.SpecifyKind(new DateTime(2025, 10, 31, 17, 30, 59), DateTimeKind.Local);
+        TimeSpan offset = TimeZoneInfo.Local.GetUtcOffset(local);
+
+        f.Value = local;
+
+        Assert.That(f.Value.Kind, Is.EqualTo(DateTimeKind.Utc));
+        Assert.That(f.Value, Is.EqualTo(local - offset));
     }
 
     [Test]

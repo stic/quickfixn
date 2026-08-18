@@ -8,9 +8,10 @@ namespace QuickFix.Fields;
 /// on every assignment instead of leaving it <see cref="DateTimeKind.Unspecified"/>.
 /// </summary>
 /// <remarks>
-/// <see cref="Value"/> is hidden (not overridden) for performance, so normalization only applies when
-/// accessed through a variable/parameter statically typed as <see cref="UtcDateTimeField"/> or a
-/// subclass; code that upcasts to <see cref="DateTimeField"/> before assigning bypasses it.
+/// Note that <see cref="QuickFix.FieldMap.GetDateTime(int)"/> still returns
+/// <see cref="DateTimeKind.Unspecified"/> for a wire-parsed value, because a bare tag lookup has no
+/// DataDictionary context to know the field is a UTCTIMESTAMP. Use the typed <c>GetField</c> overloads
+/// to obtain a normalized value.
 /// </remarks>
 public class UtcDateTimeField : DateTimeField
 {
@@ -27,7 +28,13 @@ public class UtcDateTimeField : DateTimeField
     public UtcDateTimeField(int tag, DateTime dt, TimePrecision timeFormatPrecision)
         : base(tag, ToUtc(dt), timeFormatPrecision) {}
 
-    public new DateTime Value
+    // Deliberately an override, not `new`-hiding, even though FieldBase<T>.Value is on a hot path.
+    // Hiding binds normalization at compile time, so assigning through a DateTimeField-typed reference
+    // would silently emit un-normalized (e.g. local) time into a UTCTIMESTAMP field -- a wire-correctness
+    // bug. The virtual cost is negligible: the generated field classes (SendingTime, TransactTime, ...)
+    // are sealed so the JIT devirtualizes access through them, and any remaining call sits next to
+    // DateTime formatting/parsing that costs orders of magnitude more.
+    public override DateTime Value
     {
         get => base.Value;
         set => base.Value = ToUtc(value);
